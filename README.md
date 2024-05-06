@@ -81,8 +81,7 @@ sided init "Adını-yaz" --chain-id S2-testnet-1
 ```
 ### 🚧Genesis ve addrbook
 ```
-wget -O $HOME/.side/config/genesis.json http://37.120.189.81/side_testnet/genesis.json
-wget -O $HOME/.side/config/addrbook.json http://37.120.189.81/side_testnet/addrbook.json
+wget -O $HOME/.side/config/genesis.json https://raw.githubusercontent.com/molla202/Side/main/genesis.json
 ```
 ### Seed peer
 ```
