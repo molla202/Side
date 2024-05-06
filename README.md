@@ -82,12 +82,19 @@ sided init "Adını-yaz" --chain-id S2-testnet-1
 ### 🚧Genesis ve addrbook
 ```
 wget -O $HOME/.side/config/genesis.json https://raw.githubusercontent.com/molla202/Side/main/genesis.json
+wget -O $HOME/.side/config/addrbook.json https://raw.githubusercontent.com/molla202/Side/main/addrbook.json
 ```
 ### Seed peer
 ```
-SEEDS="9c14080752bdfa33f4624f83cd155e2d3976e303@side-testnet-seed.itrocket.net:45656"
-PEERS="bbbf623474e377664673bde3256fc35a36ba0df1@side-testnet-peer.itrocket.net:45656,f379c81afd53ecb5c77a4f4521b0ae63d676ff42@95.216.246.20:36656,d2f461128781967d73aaecd9b8299c1bc817ec2f@5.104.86.185:656,572a44f91202908f5057ebdbb8a616bdb1f79498@65.109.113.228:60756,a70265a28a06e5a7d525920514ae17406dbeffd0@104.236.66.76:26656,027ef6300590b1ca3a2b92a274247e24537bd9c9@65.109.65.248:49656,91ae0fe0e7298b1fa5ce4ed06ce7afc1435d8be3@159.203.79.119:26656,2803ac0536102d14d1231ee2ba2401220e6e5161@188.40.66.173:26356,87a70a7d6302a288dd00ee6c09e840b123260190@78.46.79.238:11356,453a0a58f8e189d1682b3b3daefb4bfe3ca44c03@144.217.68.182:26356,dbe7d91d84f183cf26409cc42eb0c2a2c67de62a@167.235.178.134:26356"
-sed -i -e "s/^seeds *=.*/seeds = \"$SEEDS\"/; s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" $HOME/.side/config/config.toml
+sed -i.bak -e "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.005uside\"/;" ~/.side/config/app.toml
+external_address=$(wget -qO- eth0.me) 
+sed -i.bak -e "s/^external_address *=.*/external_address = \"$external_address:26656\"/" $HOME/.side/config/config.toml
+peers="43cb99189637d1e35b8f11c1580cff305157c94b@54.249.68.205:26656"
+sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$peers\"/" $HOME/.side/config/config.toml
+seeds="582dedd866dd77f25ac0575118cf32df1ee50f98@202.182.119.24:26656"
+sed -i.bak -e "s/^seeds =.*/seeds = \"$seeds\"/" $HOME/.side/config/config.toml
+sed -i 's/max_num_inbound_peers =.*/max_num_inbound_peers = 50/g' $HOME/.side/config/config.toml
+sed -i 's/max_num_outbound_peers =.*/max_num_outbound_peers = 50/g' $HOME/.side/config/config.toml
 ```
 ### 🚧Port ayar
 ```
@@ -110,15 +117,19 @@ s%:26660%:${SIDE_PORT}660%g" $HOME/.side/config/config.toml
 ```
 ### 🚧Puring
 ```
-sed -i -e "s/^pruning *=.*/pruning = \"custom\"/" $HOME/.side/config/app.toml
-sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"100\"/" $HOME/.side/config/app.toml
-sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"50\"/" $HOME/.side/config/app.toml
+pruning="custom"
+pruning_keep_recent="1000"
+pruning_keep_every="0"
+pruning_interval="10"
+sed -i -e "s/^pruning *=.*/pruning = \"$pruning\"/" $HOME/.side/config/app.toml
+sed -i -e "s/^pruning-keep-recent *=.*/pruning-keep-recent = \"$pruning_keep_recent\"/" $HOME/.side/config/app.toml
+sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every\"/" $HOME/.side/config/app.toml
+sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.side/config/app.toml
 ```
-### 🚧Gas ve diğer ayarlar
+### İndexer
 ```
-sed -i 's|minimum-gas-prices =.*|minimum-gas-prices = "0.005uside"|g' $HOME/.side/config/app.toml
-sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.side/config/config.toml
-sed -i -e "s/^indexer *=.*/indexer = \"null\"/" $HOME/.side/config/config.toml
+indexer="null" &&
+sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/.side/config/config.toml
 ```
 ### 🚧Servis oluşturalım
 ```
