@@ -148,7 +148,7 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOF
 ```
-### 🚧Snap    NOT NOW!!!
+### 🚧Snap
 ```
 sided tendermint unsafe-reset-all --home $HOME/.sidechain
 if curl -s --head curl http://37.120.189.81/side_testnet/side_snap.tar.lz4 | head -n 1 | grep "200" > /dev/null; then
